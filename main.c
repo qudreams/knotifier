@@ -3,6 +3,7 @@
 #include <linux/version.h>
 #include <linux/vermagic.h>
 #include "proc_exit.h"
+#include "mod_reg.h"
 
 #define DEVICE_NAME     "knotifier"
 
@@ -12,12 +13,22 @@ static int __init knotifier_init(void)
     printk("-----Start knotifier module,"
         "kernel-version: %s\n",UTS_RELEASE);
     rc = kproc_exit_init();
+    if(rc) { return rc; }
+
+    rc = kmodule_notifier_init();
+    if(rc) { goto out; }
+
+    return 0;
+
+out:
+    kproc_exit_uninit();
     return rc;
 }
 
 static void __exit knotifier_exit(void)
 {
     kproc_exit_uninit();
+    kmodule_notifier_uninit();
     printk("-----Exit knotifier module-----\n");
 }
 
