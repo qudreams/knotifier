@@ -12,7 +12,7 @@ ifeq ($(DEBUG), 1)
 endif
 
 objs += proc_exit.o main.o
-objs += mod_reg.o
+objs += mod_reg.o proc_exec.o
 
 ifeq ($(KVER),$(shell uname -r))
     obj-m += knotifier.o
